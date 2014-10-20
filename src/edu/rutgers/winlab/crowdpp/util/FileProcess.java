@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Environment;
 
 /**
@@ -53,7 +54,7 @@ public class FileProcess {
 
 	/** @return the SD card path */
 	public static String getSdPath() {
-		return Environment.getExternalStorageDirectory().getPath();
+		return  Environment.getExternalStorageDirectory().getPath();
 	}
 	
 	/** delete the file */

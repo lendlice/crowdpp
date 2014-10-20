@@ -389,6 +389,7 @@ public class MFCC {
 		
 		String listfile = Environment.getExternalStorageDirectory().getPath() + "/listfile.txt";
 		FileProcess.writeToSd(args[3] + " " + filename + ".jstk.mfcc.txt", "listfile.txt"); 
+		Log.i("MFCC",args[3] + " " + filename + ".jstk.mfcc.txt" );
 		
 		String[] argscv = new String[4];	//frame ascii  --in-out-list listfile.txt
 		argscv[0] = "frame";

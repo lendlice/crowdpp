@@ -44,8 +44,10 @@ import edu.rutgers.winlab.crowdpp.service.SpeakerCountService;
 import edu.rutgers.winlab.crowdpp.util.Constants;
 import edu.rutgers.winlab.crowdpp.util.FileProcess;
 import edu.rutgers.winlab.crowdpp.util.Now;
-
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -98,6 +100,17 @@ public class HomeFragment extends Fragment {
 	private SQLiteDatabase mDB = null;
 	
 	private AmazonS3Client s3Client;
+	private boolean isMyServiceRunning() {
+		//final View view = inflater.inflate(R.layout.home_fragment_layout, container, false);	
+	    ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if ("edu.rutgers.winlab.crowdpp.service.SpeakerCountService".equals(service.service.getClassName())) {
+	            return true;
+	            
+	        }
+	    }
+	    return false;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +126,9 @@ public class HomeFragment extends Fragment {
 		timer_cal = (Chronometer) view.findViewById(R.id.timer_calibration);		
 		timer_test = (Chronometer) view.findViewById(R.id.timer_test);
 		rl_service = (RelativeLayout) view.findViewById(R.id.rl_home_service);	    	
-		rl_test = (RelativeLayout) view.findViewById(R.id.rl_home_test);	    	
+		rl_test = (RelativeLayout) view.findViewById(R.id.rl_home_test);	
+		if(isMyServiceRunning()==true)
+			tb_service.setChecked(true);
 
     if (Constants.calibration())
     	tv_cal_content.setText("You are all set for the calibration.");

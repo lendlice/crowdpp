@@ -41,12 +41,17 @@ import edu.rutgers.winlab.crowdpp.audio.Yin;
 import edu.rutgers.winlab.crowdpp.db.DataBaseHelper;
 import edu.rutgers.winlab.crowdpp.sensor.LocationTracker;
 import edu.rutgers.winlab.crowdpp.ui.HomeFragment;
+import edu.rutgers.winlab.crowdpp.ui.MainActivity;
+//import edu.rutgers.winlab.crowdpp.ui.test.MainActivity;
 import edu.rutgers.winlab.crowdpp.util.Constants;
 import edu.rutgers.winlab.crowdpp.util.FileProcess;
 import edu.rutgers.winlab.crowdpp.util.Now;
 import edu.rutgers.winlab.crowdpp.util.PhoneStatus;
-
+import edu.rutgers.winlab.crowdpp.R;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -102,11 +107,26 @@ public class SpeakerCountService extends Service {
 	static long sys_time;
 	static String date, start, end;
 	static String curr_hr, curr_min, curr_date;
+	public static final int NOTIFICATIN_ID = 100;
+	private void showInfo(){ 
+        NotificationManager manager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE); 
+                   //get the service of the notification                
+               Notification mNotification = new Notification();  
+               mNotification.icon = R.drawable.ic_launcher;
+               mNotification.flags |=Notification.FLAG_ONGOING_EVENT;// is running           
+               Intent intent = new Intent(this,MainActivity.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);              
+               PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+               mNotification.contentIntent = pendingIntent;
+               mNotification.setLatestEventInfo(this, "Crowdpp4.0£º", "The Service is Running", pendingIntent);
+           manager.notify(NOTIFICATIN_ID, mNotification);
+        }
 
 	@Override 
 	public void onCreate() {
 		Toast.makeText(this, "Speaker Count Service Started ", Toast.LENGTH_SHORT).show();
 		serviceDir = new File(Constants.servicePath);
+		showInfo();
 		if (!serviceDir.exists() || !serviceDir.isDirectory()) {
 			serviceDir.mkdir();
 		}
@@ -341,6 +361,8 @@ public class SpeakerCountService extends Service {
 	public void onDestroy()	{
 		Log.i("Crowd++", "Service stop...");		
 		Toast.makeText(this, "Crowd++ service stop...", Toast.LENGTH_SHORT).show();
+		NotificationManager manager2 = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager2.cancelAll();
 		if (recording) {
 			Intent intent = new Intent(SpeakerCountService.this, AudioRecordService.class);
 			stopService(intent);

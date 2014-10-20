@@ -35,8 +35,8 @@ public class Constants {
 	
 	/** The constants for uploading to the Amazon S3 cloud storage */
 	// Please register AWS and get your own ACCESS_KEY_ID and SECRET_KEY
-	public static String ACCESS_KEY_ID = "AKIAIMJSBNPCNY3ZIASQ";
-	public static String SECRET_KEY = "08myOa5/5Upw7dG5X/SRgcq3YhYyMhJmJy+TqeDK";
+	public static String ACCESS_KEY_ID = "Your ACCESS_KEY_ID";
+	public static String SECRET_KEY = "Your SECRET_KEY";
 	
 	public static String dbBucket = (ACCESS_KEY_ID + ".crowdppDatabase").toLowerCase(Locale.US);
 	public static String calBucket = (ACCESS_KEY_ID + ".crowdppCalibration").toLowerCase(Locale.US);
